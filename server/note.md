@@ -18,3 +18,34 @@
 `/db/DbUtils.js`用于对外暴露数据库对象`db`以及id生成器对象`genid`
 
 创建一个简单路由`/routers/TestRouter.js`，同时测试db与genid有效性
+
+# 封装db.all与db.run方法
+
+/db/DbUtils.js：
+
+~~~js
+...
+/*
+    封装db.all&db.run方法防止db.all&db.run回调函数体中调用db.all | db.run产生的地狱回调问题,外部使用我们封装的这两个方法时就可以借助async—await（或者then）
+*/
+db.async = {};
+
+db.async.all = (sql, params) => {
+    return new Promise((resolve, reject) => {
+        db.all(sql, params, (err, rows) => {
+            resolve({err, rows});
+        })
+    })
+}
+
+db.async.run = (sql, params) => {
+    return new Promise((resolve, reject) => {
+        db.all(sql, params, (err, rows) => {
+            resolve({err, rows});
+        })
+    })
+}
+
+...
+~~~
+

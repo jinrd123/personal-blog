@@ -5,12 +5,11 @@ const {db, genid} = require("../db/DbUtils.js");
 /*
     此路由接口暂时为了测试db与genid有效性：无问题
 */
-router.get("/test", (req, res) => {
-    db.all("select * from `admin`", [], (err, rows) => {
-        console.log(rows);
-    })
+router.get("/test", async (req, res) => {
+    let out = await db.async.all("select * from `admin`", []);
     res.send({
-        id: genid.NextId()
+        id: genid.NextId(),
+        out
     });
 })
 
