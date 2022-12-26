@@ -61,3 +61,8 @@ db.async.run = (sql, params) => {
 
 详见`/routers/BlogRouter.js`。
 
+# 文件上传接口
+
+详见`/routers/UploadRouter.js`。
+
+把上传的文件存放到`/public/upload`文件夹中，并且返回给前端文件url数组，通过url可以访问服务端文件资源（app.js中使用`express.static`中间件托管`public`文件夹）
