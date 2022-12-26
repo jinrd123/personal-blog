@@ -56,3 +56,8 @@ db.async.run = (sql, params) => {
 # 分类表增删改查接口实现
 
 详见`/routers/CategoryRouter.js`。
+
+# 博客表增删改查接口实现
+
+详见`/routers/BlogRouter.js`。
+

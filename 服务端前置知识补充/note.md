@@ -433,6 +433,13 @@ SELECT * FROM `user` WHERE `id` NOT IN (2,5);
 **LIMIT** 子句用于限制由 SELECT 语句返回的数据数量。
 
 ~~~sql
+select * from `user` limit a,b
+--从查询的结果集合中第a条数据开始取，取b条
+--等价于：
+select * from `user` limit b offset a
+~~~
+
+~~~sql
 select * from `user` limit 2
 select * from `user` limit 2,2
 ~~~
