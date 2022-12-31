@@ -233,3 +233,7 @@ const adminStore = AdminStore();
 这样就形成一个闭环：点击左侧导航栏触发`toPage`函数：在路由转跳的同时修改`pageTag`，即左侧导航栏展示高亮与路由同步；当页面刷新时，`pageTag`会改变，但是路由没有随之改变，所以`watch`监听`pageTag`同步改变路由。
 
 ## Category组件基本数据展示
+
+## 修改点击退出时路由无法正常转跳的bug
+
+watch的逻辑不完善所导致！

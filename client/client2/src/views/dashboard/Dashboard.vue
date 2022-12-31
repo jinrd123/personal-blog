@@ -29,15 +29,21 @@ let menus = [
 
 let pageTag = ref(0); // 0, 1, 2对应三个menus
 watch(pageTag, (newValue) => {
-  router.push(menus[newValue].href)
+  if(newValue === 2) {
+    router.push("/login");
+  }else {
+    router.push(menus[newValue].href);
+  }
 },{
   immediate: true,
 })
 const toPage = (index: number) => {
     pageTag.value = index;
-    if(menus[pageTag.value].href == "logout") {
+    console.log(menus[pageTag.value].href)
+    router.push({path: "/login"});
+    if(menus[pageTag.value].href === "logout") {
         adminStore.token = "";
-        router.push("/login");
+        router.push({path: "/login"});
     }else {
         router.push(menus[pageTag.value].href);
     }
