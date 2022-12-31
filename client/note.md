@@ -224,4 +224,12 @@ const adminStore = AdminStore();
 
 左部为导航栏，通过遍历`menus`数组得到，右侧展示路由组件`Article.vue`或`Category.vue`
 
+## Dashboard页面路由切换
+
 实现路由切换函数`toPage`
+
+在`Dashboard`组件中，我们建立了一个`pageTag`变量来标识当前左侧导航栏哪一个被选中，但是我们在刷新页面时，`pageTag`会被初始化为初始值，但是页面刷新路由并没有改变，所以导致左侧选中的（高亮的）导航与真正的路由展示不匹配，所以要在`pageTag`改变时更改路由，即`watch`监视`pageTag`，回调中进行路由转跳（路由修改）。
+
+这样就形成一个闭环：点击左侧导航栏触发`toPage`函数：在路由转跳的同时修改`pageTag`，即左侧导航栏展示高亮与路由同步；当页面刷新时，`pageTag`会改变，但是路由没有随之改变，所以`watch`监听`pageTag`同步改变路由。
+
+## Category组件基本数据展示

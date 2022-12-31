@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { AdminStore } from "../../stores/AdminStore";
 import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
@@ -28,9 +28,14 @@ let menus = [
 ];
 
 let pageTag = ref(0); // 0, 1, 2对应三个menus
+watch(pageTag, (newValue) => {
+  router.push(menus[newValue].href)
+},{
+  immediate: true,
+})
 const toPage = (index: number) => {
     pageTag.value = index;
-    if(menus[pageTag.value].href === "logout") {
+    if(menus[pageTag.value].href == "logout") {
         adminStore.token = "";
         router.push("/login");
     }else {
