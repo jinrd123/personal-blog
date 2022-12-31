@@ -10,7 +10,7 @@ const port = 8080;
 */
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "content-type");
+    res.header("Access-Control-Allow-Headers", "*");
     res.header("Access-Control-Allow-Methods", "DELETE,PUT,POST,GET,OPTIONS");
     if (req.method == "OPTIONS") res.sendStatus(200); //让options尝试请求快速结束
     else next();

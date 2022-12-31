@@ -28,3 +28,45 @@ main.js中对开发所需的依赖进行引入
 naive-ui组件库暂时使用全局引入，后期可优化为按需引入
 
 配置`@/common/router.js`路由配置文件
+
+## 引入pinia
+
+`main.js`：
+
+~~~js
+import { createPinia } from "pinia"
+...
+app.use(createPinia());
+~~~
+
+## 配置项目路由
+
+`@/common/router.js`（路由配置文件）：
+
+~~~js
+import { createRouter, createWebHashHistory } from "vue-router";
+
+let routes = [
+    { path: "/", component: () => import("../views/Test.vue") },
+	...
+];
+
+const router = createRouter({
+    history: createWebHashHistory(),
+    routes,
+})
+
+export { router, routes };
+~~~
+
+`@/main.js`：
+
+~~~js
+import { router } from "./common/router";
+...
+app.use(router);
+~~~
+
+## 配置axios
+
+用`e_commerce_platform`的封装方式封装了axios并创建了`api`文件夹管理接口

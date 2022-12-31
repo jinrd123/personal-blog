@@ -22,6 +22,28 @@ router.get("/list", async (req, res) => {
     }
 
 })
+// 列表接口:获取分类表的全部数据数组（id && name数组）
+router.get("/getbyid", async (req, res) => {
+    const search_sql = "SELECT `name` FROM `category` where `id` = ?";
+
+    let id = req.query.id;
+
+    let { err, rows } = await db.async.all(search_sql, [id]);
+
+    if (err == null) {
+        res.send({
+            code: 200,
+            msg: "查询成功",
+            row: rows[0] //rows:rows
+        })
+    } else {
+        res.send({
+            code: 500,
+            msg: "查询失败"
+        })
+    }
+
+})
 
 // 删除接口 /category/_token/delete?id=xxx：删除query参数id指定的分类
 router.delete("/_token/delete", async (req, res) => {
