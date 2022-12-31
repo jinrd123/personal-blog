@@ -14,7 +14,7 @@
         </n-form-item>
       </n-form>
       <template #footer>
-        <n-checkbox v-model:checked="admin.rember" label="记住我" />
+        <n-checkbox v-model:checked="admin.remember" label="记住我" />
         <n-button @click="login">登录</n-button>
       </template>
     </n-card>
@@ -43,9 +43,9 @@ let rules = {
 };
 
 const admin = reactive({
-  account: "",
-  password: "",
-  rember: false,
+  account: localStorage.getItem("account") || "",
+  password: localStorage.getItem("password") || "",
+  remember: localStorage.getItem("remember") === "1" || false,
 });
 
 const login = async () => {
@@ -55,6 +55,12 @@ const login = async () => {
         adminStore.account = result.data.data.account;
         adminStore.token = result.data.data.token;
         message.info("登录成功");
+
+        if(admin.remember) {
+          localStorage.setItem("account", admin.account);
+          localStorage.setItem("password", admin.password);
+          localStorage.setItem("remember", admin.remember? "1":"0");
+        }
     } else {
         message.error("登录失败");
     }
