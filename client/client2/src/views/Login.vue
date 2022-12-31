@@ -15,7 +15,7 @@
       </n-form>
       <template #footer>
         <n-checkbox v-model:checked="admin.rember" label="记住我" />
-        <n-button>登录</n-button>
+        <n-button @click="login">登录</n-button>
       </template>
     </n-card>
   </div>
@@ -24,9 +24,7 @@
 <script setup lang="ts">
 import { NCard, NForm, NFormItem, NInput, NCheckbox, NButton } from "naive-ui";
 import { reactive, inject, onMounted } from "vue";
-
-// 这里拿到的axios是我们封装好的axios
-const axios = inject("requests");
+import { reqLogin } from "../api";
 
 let rules = {
   account: [
@@ -44,6 +42,12 @@ const admin = reactive({
   password: "",
   rember: false,
 });
+
+const login = async () => {
+    let result = await reqLogin(admin);
+    console.log(result);
+}
+
 </script>
 
 <style scoped>
