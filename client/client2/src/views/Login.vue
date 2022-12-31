@@ -22,9 +22,14 @@
 </template>
 
 <script setup lang="ts">
-import { NCard, NForm, NFormItem, NInput, NCheckbox, NButton } from "naive-ui";
+import { NCard, NForm, NFormItem, NInput, NCheckbox, NButton, useMessage } from "naive-ui";
 import { reactive, inject, onMounted } from "vue";
+import { AdminStore } from "../../../client/src/stores/AdminStore";
 import { reqLogin } from "../api";
+import { injectKeyMessage } from '../context/context';
+
+const adminStore = AdminStore();
+const message = inject(injectKeyMessage);
 
 let rules = {
   account: [
@@ -45,7 +50,14 @@ const admin = reactive({
 
 const login = async () => {
     let result = await reqLogin(admin);
-    console.log(result);
+    if(result.data.code === 200) {
+        adminStore.token = result.data.data.token;
+        adminStore.account = result.data.data.account;
+        adminStore.token = result.data.data.token;
+        message.info("登录成功");
+    } else {
+        message.error("登录失败");
+    }
 }
 
 </script>

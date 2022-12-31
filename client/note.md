@@ -121,3 +121,78 @@ app.provide("requests", requests);
 const axios = inject("requests");
 ~~~
 
+## 用pinia创建一个仓库用来保存管理员登录信息
+
+`stores/AdminStore.js`：
+
+其实就是用pinia提供的`defineStore`方法创建一个AdminStore，这是一个函数
+
+~~~js
+import { defineStore } from "pinia"
+
+export const AdminStore = defineStore("admin", {
+    state: () => {
+        return {
+            id: 0,
+            account: "",
+            token: "",
+        }
+    },
+    actions: {},
+    getters: {},
+})
+~~~
+
+在组件中调用这个函数就可以获得仓库实例，从而访问仓库中的属性：
+
+`Login.vue`：
+
+~~~js
+import { AdminStore } from "../../../client/src/stores/AdminStore";
+
+const adminStore = AdminStore();
+~~~
+
+封装axios时在响应拦截器中原本是返回了`res.data`的，相当于只要我们服务端返回的数据，但是这样一修改axios返回的数据的结构，ts项目就会报错，因为axios返回的数据是由接口进行数据类型限制的，所以我又改成直接返回`res`了，这样我们访问服务端返回的数据还是得`res.data`（axios的响应拦截器接收的`res`其实是对服务端返回的数据的一个包装，`res.data`才是服务端返回的那个对象，当然我们服务端返回的那个对象里一般有`code` `data`等字段，所以以后我们拿到axios的返回结果`res`，要想拿到真实的服务端数据就得`res.data.data`）
+
+## naive-ui使用全局api实现message提示信息
+
+`main.js`：
+
+~~~js
+import { injectKeyMessage } from './context/context';
+const { message, notification, dialog, loadingBar } = createDiscreteApi(['message', 'dialog', 'notification'])
+app.provide(injectKeyMessage, message);
+~~~
+
+这里我们想把`message`这个玩意通过`app.provide`做一个全局提供，但是发现key如果为简单的一个字符串，子组件中`inject`拿到`message`使用（访问message对象的一些方法）时会报错，因为`provide`时没s指明`message`的类型，访问一些未知的属性，所以报类型错误。
+
+解决方案：
+
+![img](./image/p_i.png)
+
+![img](./image/p-i1.png)
+
+创建了`src/context/context.ts`文件夹，用于存放provide变量时的key（Symbol类型的变量）
+
+`Login.vue`：
+
+~~~js
+const message = inject(injectKeyMessage);
+
+/*
+	登录回调
+*/
+const login = async () => {
+    let result = await reqLogin(admin);
+    if(result.data.code === 200) {
+        adminStore.token = result.data.data.token;
+        adminStore.account = result.data.data.account;
+        adminStore.token = result.data.data.token;
+        message.info("登录成功");
+    } else {
+        message.error("登录失败");
+    }
+}
+~~~
+

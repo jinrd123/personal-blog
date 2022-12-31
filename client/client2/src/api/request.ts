@@ -9,7 +9,7 @@ requests.interceptors.request.use((config) => {
 })
 
 requests.interceptors.response.use((res)=>{
-    return res.data;
+    return res;
 },(error)=>{
     return Promise.reject(new Error('faile'));
 });
