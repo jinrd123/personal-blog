@@ -220,3 +220,8 @@ import { AdminStore } from "../../stores/AdminStore";
 const adminStore = AdminStore();
 ~~~
 
+# 后台框架搭建
+
+左部为导航栏，通过遍历`menus`数组得到，右侧展示路由组件`Article.vue`或`Category.vue`
+
+实现路由切换函数`toPage`
