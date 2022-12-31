@@ -1,5 +1,6 @@
 <template>
   <div>
+    <n-button @click="addCategoryTrigger">添加分类</n-button>
     <n-table :bordered="false" :single-line="false">
       <thead>
         <tr>
@@ -23,13 +24,31 @@
         </template>
       </tbody>
     </n-table>
+
+    <n-modal
+      v-model:show="showModal"
+      preset="dialog"
+      title="Dialog"
+    >
+      <template #header>
+        <div>添加分类</div>
+      </template>
+      <div>
+        <n-input v-model:value="addCategory.name"></n-input>
+      </div>
+      <template #action>
+        <div>
+          <n-button @click="add">提交</n-button>
+        </div>
+      </template>
+    </n-modal>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { reqCategoryList } from "../../api/index.js";
-import { NTable, NButton, NSpace } from "naive-ui";
+import { onMounted, ref, reactive } from "vue";
+import { reqCategoryList, reqAddCategory } from "../../api/index.js";
+import { NTable, NButton, NSpace, NModal, NInput } from "naive-ui";
 const categoryList = ref([]);
 onMounted(() => {
   categoryListInit();
@@ -38,6 +57,23 @@ const categoryListInit = async () => {
   let result = await reqCategoryList();
   categoryList.value = result.data.rows;
 };
+
+const showModal = ref(false);
+const addCategoryTrigger = () => {
+  showModal.value = true;
+}
+
+const addCategory = reactive({
+  name:"",
+})
+
+/*
+  目前点击add可以正常发送请求，但是请求未携带token会失败——当前任务，给请求添加token
+*/
+const add = async () => {
+  let result = await reqAddCategory(addCategory);
+  console.log(result);
+}
 </script>
 
 <style lang="scss" scoped>

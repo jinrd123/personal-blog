@@ -237,3 +237,7 @@ const adminStore = AdminStore();
 ## 修改点击退出时路由无法正常转跳的bug
 
 watch的逻辑不完善所导致！
+
+# Category组件的搭建
+
+点击左上角进行添加分类的基本结构搭建
