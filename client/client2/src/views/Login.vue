@@ -23,7 +23,11 @@
 
 <script setup lang="ts">
 import { NCard, NForm, NFormItem, NInput, NCheckbox, NButton } from "naive-ui";
-import { reactive } from "vue";
+import { reactive, inject, onMounted } from "vue";
+
+// 这里拿到的axios是我们封装好的axios
+const axios = inject("requests");
+
 let rules = {
   account: [
     { required: true, message: "请输入账号", trigger: "blur" },

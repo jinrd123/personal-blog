@@ -105,3 +105,19 @@ app.use(router);
 </template>
 ~~~
 
+## provide全局提供封装的axios实例——requests
+
+`main.js`：
+
+~~~js
+import requests from "./api/request";
+
+app.provide("requests", requests);
+~~~
+
+`Login.vue`：
+
+~~~js
+const axios = inject("requests");
+~~~
+
