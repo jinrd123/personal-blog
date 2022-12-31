@@ -24,9 +24,13 @@
 <script setup lang="ts">
 import { NCard, NForm, NFormItem, NInput, NCheckbox, NButton, useMessage } from "naive-ui";
 import { reactive, inject, onMounted } from "vue";
-import { AdminStore } from "../../../client/src/stores/AdminStore";
+import { AdminStore } from "../stores/AdminStore";
 import { reqLogin } from "../api";
 import { injectKeyMessage } from '../context/context';
+
+import { useRouter, useRoute } from "vue-router";
+const router = useRouter();
+const route = useRoute()
 
 const adminStore = AdminStore();
 const message = inject(injectKeyMessage);
@@ -61,6 +65,8 @@ const login = async () => {
           localStorage.setItem("password", admin.password);
           localStorage.setItem("remember", admin.remember? "1":"0");
         }
+
+        router.push("/dashboard");
     } else {
         message.error("登录失败");
     }

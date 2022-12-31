@@ -199,3 +199,24 @@ const login = async () => {
 ## 记住密码功能
 
 借助本地存储即可
+
+## 登录后路由转跳 && 拿到pinia仓库
+
+`Login.vue`：
+
+~~~js
+import { useRouter, useRoute } from "vue-router";
+const router = useRouter();
+
+...
+
+router.push("/dashboard");
+~~~
+
+`Dashboard.vue`：
+
+~~~js
+import { AdminStore } from "../../stores/AdminStore";
+const adminStore = AdminStore();
+~~~
+
