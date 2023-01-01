@@ -67,12 +67,9 @@ const addCategory = reactive({
   name:"",
 })
 
-/*
-  目前点击add可以正常发送请求，但是请求未携带token会失败——当前任务，给请求添加token
-*/
 const add = async () => {
   let result = await reqAddCategory(addCategory);
-  console.log(result);
+  categoryListInit();
 }
 </script>
 

@@ -13,6 +13,6 @@ export const reqCategoryList = async () => {
 }
 
 export const reqAddCategory = async (newCategory: { name: String }) => {
-    let result = await requests({ url: "/category/_token/add", data: newCategory })
+    let result = await requests({ url: "/category/_token/add", data: newCategory, method: "post" })
     return result;
 }
