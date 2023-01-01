@@ -11,5 +11,5 @@ app.use(createPinia());
 app.use(router);
 app.provide(injectKeyMessage, message);
 app.provide(injectKeyDialog, dialog);
-app.provide("notification", notification);
+app.provide("server_url", "http://localhost:8080")
 app.mount('#app')

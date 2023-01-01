@@ -321,3 +321,42 @@ const valueHtml = ref(props.modelValue);
 ~~~
 
 这样就实现了文章内容与富文本编辑器的完全双向绑定。
+
+## 富文本编辑器配置图片上传
+
+富文本编辑器中上传图片，原理就是我们把一个图片上传到服务器，然后对应的富文本编辑器中生成的html字符串中产生一个<img>标签，`src`属性指向服务器上的图片地址
+
+~~~ts
+const server_url = inject("server_url");
+/*
+	下面因为对editorConfig添加属性，ts会报错，所以提前定义一个接口
+*/
+interface editorConfigInterface {
+  placeholder: string;
+  MENU_CONF: Object;
+}
+const editorConfig: editorConfigInterface = {
+  placeholder: "请输入内容...",
+  MENU_CONF: {},
+};
+editorConfig.MENU_CONF["uploadImage"] = {
+  base64LimitSize: 10 * 1024, // 小体积图片转base64而不进行上传
+  server: server_url + "/upload/rich_editor_upload", // 配置上传的服务端地址
+};
+~~~
+
+但是经过上面的配置，图片不能正常显式，因为生成的<img>的`src`缺少了服务器地址（只有上传接口...）
+
+~~~typescript
+editorConfig.MENU_CONF['insertImage'] = {
+    parseImageSrc: (src:string) => {
+        if(src.indexOf("http") !== 0) {
+            return `${server_url}${src}`;
+        }
+    }
+}
+~~~
+
+`parseImageSrc`就相当于生成<img>的`src`前的拦截器函数，函数逻辑：如果`src`里没有包含`http`（服务器地址），就补上。
+
+到这里就可以实现富文本编辑器正常的上传图片了。

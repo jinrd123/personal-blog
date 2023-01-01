@@ -20,6 +20,7 @@
 <script setup lang="ts">
 import "@wangeditor/editor/dist/css/style.css";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
+import { inject } from "vue";
 import {
   shallowRef,
   ref,
@@ -29,8 +30,32 @@ import {
 } from "vue";
 // 编辑器实例，必须用 shallowRef，重要！
 const editorRef = shallowRef();
-const toolbarConfig = {};
-const editorConfig = { placeholder: "请输入内容..." };
+const toolbarConfig = {
+    excludeKeys: ["uploadVideo"], // 屏蔽视频上传功能
+};
+
+const server_url = inject("server_url");
+interface editorConfigInterface {
+  placeholder: string;
+  MENU_CONF: Object;
+}
+const editorConfig: editorConfigInterface = {
+  placeholder: "请输入内容...",
+  MENU_CONF: {},
+};
+editorConfig.MENU_CONF["uploadImage"] = {
+  base64LimitSize: 10 * 1024, // 小体积图片转base64而不进行上传
+  server: server_url + "/upload/rich_editor_upload", // 配置上传的服务端地址
+};
+
+editorConfig.MENU_CONF['insertImage'] = {
+    parseImageSrc: (src:string) => {
+        if(src.indexOf("http") !== 0) {
+            return `${server_url}${src}`;
+        }
+    }
+}
+
 const mode = ref("default");
 const props = defineProps({
   modelValue: {
