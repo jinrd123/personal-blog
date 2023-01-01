@@ -39,7 +39,6 @@ watch(pageTag, (newValue) => {
 })
 const toPage = (index: number) => {
     pageTag.value = index;
-    console.log(menus[pageTag.value].href)
     router.push({path: "/login"});
     if(menus[pageTag.value].href === "logout") {
         adminStore.token = "";

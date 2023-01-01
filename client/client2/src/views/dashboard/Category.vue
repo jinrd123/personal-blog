@@ -17,7 +17,7 @@
             <td>
               <n-space>
                 <n-button>修改</n-button>
-                <n-button>删除</n-button>
+                <n-button @click="deleteCategory(item)">删除</n-button>
               </n-space>
             </td>
           </tr>
@@ -46,9 +46,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, reactive } from "vue";
-import { reqCategoryList, reqAddCategory } from "../../api/index.js";
+import { onMounted, ref, reactive, inject } from "vue";
+import { reqCategoryList, reqAddCategory, reqDeleteCategory } from "../../api/index.js";
 import { NTable, NButton, NSpace, NModal, NInput } from "naive-ui";
+import { injectKeyMessage } from '../../context/context';
+const message = inject(injectKeyMessage);
 const categoryList = ref([]);
 onMounted(() => {
   categoryListInit();
@@ -69,7 +71,23 @@ const addCategory = reactive({
 
 const add = async () => {
   let result = await reqAddCategory(addCategory);
-  categoryListInit();
+  if(result.data.code === 200) {
+    categoryListInit();
+    message.info("添加成功");
+  }else {
+    message.error("添加失败，请检查是否登录~");
+  }
+  showModal.value = false;
+}
+
+const deleteCategory = async (category: { id: number, name: string}) => {
+  let result = await reqDeleteCategory(category.id);
+  if(result.data.code === 200) {
+    categoryListInit();
+    message.info("删除成功");
+  }else {
+    message.error("删除失败，请检查是否登录~");
+  }
 }
 </script>
 

@@ -50,12 +50,12 @@ router.delete("/_token/delete", async (req, res) => {
 
     let id = req.query.id
     const delete_sql = "DELETE FROM `category` WHERE `id` = ?"
-    let { err, rows } = await db.async.run(delete_sql, [id])
+    let { err } = await db.async.run(delete_sql, [id])
 
     if (err == null) {
         res.send({
             code: 200,
-            msg: "删除成功"
+            msg: "删除成功",
         })
     } else {
         res.send({

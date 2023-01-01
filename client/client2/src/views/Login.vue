@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { NCard, NForm, NFormItem, NInput, NCheckbox, NButton, useMessage } from "naive-ui";
+import { NCard, NForm, NFormItem, NInput, NCheckbox, NButton } from "naive-ui";
 import { reactive, inject, onMounted } from "vue";
 import { AdminStore } from "../stores/AdminStore";
 import { reqLogin } from "../api";

@@ -16,3 +16,8 @@ export const reqAddCategory = async (newCategory: { name: String }) => {
     let result = await requests({ url: "/category/_token/add", data: newCategory, method: "post" })
     return result;
 }
+
+export const reqDeleteCategory = async (categoryId: number) => {
+    let result = await requests({url: `category/_token/delete?id=${categoryId}`, method: "delete"});
+    return result;
+}
