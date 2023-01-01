@@ -18,6 +18,11 @@ export const reqAddCategory = async (newCategory: { name: String }) => {
 }
 
 export const reqDeleteCategory = async (categoryId: number) => {
-    let result = await requests({url: `category/_token/delete?id=${categoryId}`, method: "delete"});
+    let result = await requests({ url: `/category/_token/delete?id=${categoryId}`, method: "delete" });
+    return result;
+}
+
+export const reqUpdateCategory = async (category: { id: number, name: string }) => {
+    let result = await requests({ url: "/category/_token/update", data: category, method: "put" });
     return result;
 }

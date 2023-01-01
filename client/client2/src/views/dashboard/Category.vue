@@ -1,6 +1,8 @@
 <template>
   <div>
-    <n-button @click="addCategoryTrigger">添加分类</n-button>
+    <div style="margin-bottom:20px;">
+      <n-button @click="addCategoryTrigger">添加分类</n-button>
+    </div>
     <n-table :bordered="false" :single-line="false">
       <thead>
         <tr>
@@ -16,7 +18,7 @@
             <td>{{ item.name }}</td>
             <td>
               <n-space>
-                <n-button>修改</n-button>
+                <n-button @click="updataCategory(item)">修改</n-button>
                 <n-button @click="deleteCategory(item)">删除</n-button>
               </n-space>
             </td>
@@ -38,6 +40,20 @@
         </div>
       </template>
     </n-modal>
+
+    <n-modal v-model:show="showUpdateModal" preset="dialog" title="Dialog">
+      <template #header>
+        <div>修改分类</div>
+      </template>
+      <div>
+        <n-input v-model:value="updateCategoryInfo.name" placeholder="请输入新名称"></n-input>
+      </div>
+      <template #action>
+        <div>
+          <n-button @click="update">提交</n-button>
+        </div>
+      </template>
+    </n-modal>
   </div>
 </template>
 
@@ -47,6 +63,7 @@ import {
   reqCategoryList,
   reqAddCategory,
   reqDeleteCategory,
+  reqUpdateCategory
 } from "../../api/index.js";
 import { NTable, NButton, NSpace, NModal, NInput } from "naive-ui";
 import { injectKeyMessage, injectKeyDialog } from "../../context/context";
@@ -99,6 +116,26 @@ const deleteCategory = async (category: { id: number; name: string }) => {
     onNegativeClick: () => {},
   });
 };
+
+const showUpdateModal = ref(false);
+const updateCategoryInfo = reactive({
+  id:0,
+  name: "",
+});
+const updataCategory = async (category: {id: number, name: string}) => {
+  updateCategoryInfo.id = category.id;
+  showUpdateModal.value = true;
+}
+const update = async () => {
+  let result = await reqUpdateCategory(updateCategoryInfo);
+  if(result.data.code === 200) {
+    message.info("修改成功~");
+    categoryListInit();
+  }else {
+    message.error(result.data.msg);
+  }
+  showUpdateModal.value = false;
+}
 </script>
 
 <style lang="scss" scoped>

@@ -70,7 +70,7 @@ router.delete("/_token/delete", async (req, res) => {
 // 修改接口：修改分类表中指定id的name
 router.put("/_token/update", async (req, res) => {
 
-    let { id, name } = req.body
+    let { id, name } = req.body;
     const update_sql = "UPDATE `category` SET `name` = ? WHERE `id` = ? "
     let { err, rows } = await db.async.run(update_sql, [name, id])
 
