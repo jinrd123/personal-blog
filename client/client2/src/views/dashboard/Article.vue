@@ -8,8 +8,9 @@
                 <n-input v-model:value="addArticle.title" placeholder="请输入标题"/>
             </n-form-item>
             <n-form-item label="内容">
-                <rich-text-editor></rich-text-editor>
+                <rich-text-editor v-model="addArticle.content"></rich-text-editor>
             </n-form-item>
+            {{addArticle.content}}
         </n-form>
       </n-tab-pane>
       <n-tab-pane name="jay chou" tab="周杰伦"> 七里香 </n-tab-pane>

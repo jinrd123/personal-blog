@@ -263,3 +263,45 @@ add函数：携带token添加完分类之后，重新请求分类数据即可
 # Article组件开发
 
 ## 基本结构搭建
+
+## 把富文本编辑器封装成一个单独的组件
+
+基本的东西（富文本的结构与逻辑）就是复制粘贴来的，这里记录一下给富文本组件（自定义组件）使用`v-model`，让`Article`组件获得`RichTextEditor`组件的内容（富文本编辑器会把编辑区的文本转化成html文档，对应`valueHtml.value`变量）
+
+`Article`组件中：
+
+~~~html
+<rich-text-editor v-model="addArticle.content"></rich-text-editor>
+~~~
+
+给富文本组件`v-model`一个值
+
+`RichTextEditor`组件中：
+
+~~~js
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: "",
+  },
+});
+
+const emit = defineEmits(["update:modelValue"]);
+
+...
+
+emit("update:modelValue", valueHtml.value);
+~~~
+
+* 通过`defineProps`接收父组件传来的值，v-model传来的默认用`modelValue`变量接收
+* 通过`defineEmits`定义组件的自定义事件，引起v-model的自定义事件默认为`update:modelValue`
+
+网文总结：
+
+v-model 在Vue里面是一个语法糖，数据的双向绑定，本质上还是通过 自定义标签的 attribute 传递和接受；
+
+在自定义标签中注册 `v-model:attriButeName="value" `, 会拆分为两个属性
+
+`:attributeName="value"` 和 `@update:attributeName="value=$event"` ；
+
+**所以只需要在相应组件中（自定义组件中）接受 attributeName 数据和调用 update:attributeName 方法，就可以实现自定义组件的v-model；**
