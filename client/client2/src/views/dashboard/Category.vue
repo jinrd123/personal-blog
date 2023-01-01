@@ -124,6 +124,7 @@ const updateCategoryInfo = reactive({
 });
 const updataCategory = async (category: {id: number, name: string}) => {
   updateCategoryInfo.id = category.id;
+  updateCategoryInfo.name = category.name;
   showUpdateModal.value = true;
 }
 const update = async () => {
