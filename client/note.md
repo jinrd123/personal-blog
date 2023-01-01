@@ -305,3 +305,19 @@ v-model 在Vue里面是一个语法糖，数据的双向绑定，本质上还是
 `:attributeName="value"` 和 `@update:attributeName="value=$event"` ；
 
 **所以只需要在相应组件中（自定义组件中）接受 attributeName 数据和调用 update:attributeName 方法，就可以实现自定义组件的v-model；**
+
+bug完善：
+
+上面的逻辑确实完成了富文本编辑器中文本修改时同步修改Article组件中的content属性，但是因为富文本编辑器中的`modelValue`接收到的Article组件的文章内容在一开始并没有给富文本编辑器，所以我们让富文本编辑器绑定的`valueHtml`属性用`modelValue`进行初始化：
+
+~~~js
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: "",
+  },
+});
+const valueHtml = ref(props.modelValue);
+~~~
+
+这样就实现了文章内容与富文本编辑器的完全双向绑定。

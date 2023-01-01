@@ -25,7 +25,7 @@ import RichTextEditor from "../../components/RichTextEditor.vue";
 const addArticle = reactive({
     categoryId: 0,
     title: "",
-    content: "",
+    content: "test",
 })
 </script>
 

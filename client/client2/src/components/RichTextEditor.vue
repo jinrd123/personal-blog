@@ -32,20 +32,19 @@ const editorRef = shallowRef();
 const toolbarConfig = {};
 const editorConfig = { placeholder: "请输入内容..." };
 const mode = ref("default");
-const valueHtml = ref("");
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: "",
+  },
+});
+const valueHtml = ref(props.modelValue);
 // 组件销毁时，也及时销毁编辑器，重要！
 onBeforeUnmount(() => {
   const editor = editorRef.value;
   if (editor == null) return;
 
   editor.destroy();
-});
-
-const props = defineProps({
-  modelValue: {
-    type: String,
-    default: "",
-  },
 });
 
 const emit = defineEmits(["update:modelValue"]);
