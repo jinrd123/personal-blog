@@ -360,3 +360,7 @@ editorConfig.MENU_CONF['insertImage'] = {
 `parseImageSrc`就相当于生成<img>的`src`前的拦截器函数，函数逻辑：如果`src`里没有包含`http`（服务器地址），就补上。
 
 到这里就可以实现富文本编辑器正常的上传图片了。
+
+## 添加文章页面`select`组件获取服务器数据正常展示
+
+plus：<n-select>组件`v-model`绑定的数据初始值应为`null`才能正常显式`placeholder`设置的内容。
