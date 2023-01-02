@@ -27,10 +27,12 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, inject } from "vue";
 import { NTabs, NTabPane, NForm, NFormItem, NInput, NSelect, NButton } from "naive-ui";
 import RichTextEditor from "../../components/RichTextEditor.vue";
 import { reqCategoryList, reqAddArticle } from "../../api/index.js";
+import { injectKeyMessage } from "../../context/context.js";
+const message = inject(injectKeyMessage);
 const addArticle = reactive({
   categoryId: null,
   title: "",
@@ -53,7 +55,11 @@ const selectOptionInit = async () => {
 
 const add = async () => {
   let result = await reqAddArticle(addArticle);
-  console.log(result);
+  if(result.data.code === 200) {
+    message.info(result.data.msg);
+  }else {
+    message.error(result.data.msg);
+  }
 }
 
 </script>
