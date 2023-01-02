@@ -26,3 +26,9 @@ export const reqUpdateCategory = async (category: { id: number, name: string }) 
     let result = await requests({ url: "/category/_token/update", data: category, method: "put" });
     return result;
 }
+
+export const reqAddArticle = async (Article: { categoryId: number, title: string, content: string }) => {
+    console.log(Article);
+    let result = requests({ url: "/blog/_token/add", data: Article, method: "post" });
+    return result;
+}

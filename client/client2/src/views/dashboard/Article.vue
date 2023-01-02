@@ -16,7 +16,9 @@
           <n-form-item label="内容">
             <rich-text-editor v-model="addArticle.content"></rich-text-editor>
           </n-form-item>
-          {{ addArticle.content }}
+          <n-form-item>
+            <n-button @click="add">提交</n-button>
+          </n-form-item>
         </n-form>
       </n-tab-pane>
       <n-tab-pane name="jay chou" tab="周杰伦"> 七里香 </n-tab-pane>
@@ -26,16 +28,16 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue";
-import { NTabs, NTabPane, NForm, NFormItem, NInput, NSelect } from "naive-ui";
+import { NTabs, NTabPane, NForm, NFormItem, NInput, NSelect, NButton } from "naive-ui";
 import RichTextEditor from "../../components/RichTextEditor.vue";
-import { reqCategoryList } from "../../api/index.js";
+import { reqCategoryList, reqAddArticle } from "../../api/index.js";
 const addArticle = reactive({
   categoryId: null,
   title: "",
   content: "",
 });
 
-let selectOptions = null;
+let selectOptions = ref(null);
 onMounted(() => {
   selectOptionInit();
 })
@@ -47,6 +49,11 @@ const selectOptionInit = async () => {
       value: item.id
     }
   })
+}
+
+const add = async () => {
+  let result = await reqAddArticle(addArticle);
+  console.log(result);
 }
 
 </script>
