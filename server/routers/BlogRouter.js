@@ -107,7 +107,7 @@ router.get("/search", async (req, res) => {
 
 // 博客删除接口 /blog/delete?id=xxx
 router.delete("/_token/delete", async (req, res) => {
-    let id = req.query.id
+    let id = req.query.id;
     const delete_sql = "DELETE FROM `blog` WHERE `id` = ?"
     let { err, rows } = await db.async.run(delete_sql, [id])
 

@@ -9,7 +9,7 @@
               <n-space align="center">
                 <div>发布时间：{{ fomatTime(blog.create_time) }}</div>
                 <n-button @click="toUpdate(blog)">修改</n-button>
-                <n-button>删除</n-button>
+                <n-button @click="toDelete(blog)">删除</n-button>
               </n-space>
             </template>
           </n-card>
@@ -98,10 +98,12 @@ import {
   reqAddArticle,
   reqBlogList,
   reqBlogDetail,
-  reqUpdateArticle
+  reqUpdateArticle,
+  reqDeleteArticle,
 } from "../../api/index.js";
-import { injectKeyMessage } from "../../context/context.js";
+import { injectKeyMessage, injectKeyDialog } from "../../context/context";
 const message = inject(injectKeyMessage);
+const dialog = inject(injectKeyDialog);
 const addArticle = reactive({
   categoryId: null,
   title: "",
@@ -188,14 +190,34 @@ const toUpdate = async (blog) => {
 
 const update = async () => {
   let result = await reqUpdateArticle(updateArticle);
-  if(result.data.code === 200) {
+  if (result.data.code === 200) {
     articleListInit();
     message.info("修改成功~");
     tabValue.value = "list";
-  }else {
-    message.error(result.data.msg)
+  } else {
+    message.error(result.data.msg);
   }
-}
+};
+
+const toDelete = async (blog) => {
+  dialog.warning({
+    title: "警告",
+    content: "确定删除么？",
+    positiveText: "确定",
+    negativeText: "不确定",
+    onPositiveClick: async () => {
+      let result = await reqDeleteArticle(blog.id);
+      if (result.data.code === 200) {
+        articleListInit();
+        message.info("删除成功~");
+        tabValue.value = "list";
+      } else {
+        message.error(result.data.msg);
+      }
+    },
+    onNegativeClick: () => {},
+  });
+};
 </script>
 
 <style scoped lang="scss">

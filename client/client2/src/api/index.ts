@@ -42,7 +42,12 @@ export const reqBlogDetail = async (id: number) => {
     return result;
 }
 
-export const reqUpdateArticle = async (Article: {id: number, title: string, categoryId: number, content: string}) => {
-    let result = requests({url: "/blog/_token/update", method: "put", data: Article});
+export const reqUpdateArticle = async (Article: { id: number, title: string, categoryId: number, content: string }) => {
+    let result = requests({ url: "/blog/_token/update", method: "put", data: Article });
+    return result;
+}
+
+export const reqDeleteArticle = async (id: number) => {
+    let result = requests({ url: "/blog/_token/delete", method: "delete", params: { id } });
     return result;
 }
