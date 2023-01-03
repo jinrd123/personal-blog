@@ -406,3 +406,44 @@ interface Person {
  `pet?: Animal;` 写法就是 `pet: Animal | undefined;` 的简写。
 
 后端的`/blog/search`接口，从`req`从获取`query`参数（`req.query`），如果我们前端使用`axios(配置对象)`的请求方式，并且不想在`url`中传递`query`参数（因为这里我们不能确定某些query参数是否存在），我们就要配置`params`属性为query参数对象，这样后端同样可以通过`req.query`来获取到query参数对象（其实就是前端axios请求的params配置项）
+
+## 更新文章功能实现
+
+~~~typescript
+const updateArticle = reactive({
+  id: 0,
+  categoryId: null,
+  title: "",
+  content: "",
+});
+
+const tabValue = ref("list"); // n-tabs展示部分对应的标识变量
+const toUpdate = async (blog) => {
+  updateArticle.id = blog.id;
+  updateArticle.categoryId = blog.category_id;
+  updateArticle.title = blog.title;
+  let result = await reqBlogDetail(blog.id);
+  let completeContent = result.data.rows[0].content;
+  updateArticle.content = completeContent;
+  tabValue.value = "update";
+};
+
+const update = async () => {
+  let result = await reqUpdateArticle(updateArticle);
+  if(result.data.code === 200) {
+    articleListInit();
+    message.info("修改成功~");
+    tabValue.value = "list";
+  }else {
+    message.error(result.data.msg)
+  }
+}
+~~~
+
+上面代码根本不用仔细看，其实完成这个业务逻辑总结下来还是一样：
+
+1. 创建一个`reactive`对象与模板上的数据进行绑定
+2. 发请求时传递这个对象的信息，数据更新后及时请求新的数据进行展示
+3. 用js修改一些页面转跳以及提示的相关逻辑
+
+就是很普通的业务套路罢了~

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <n-tabs default-value="list" justify-content="start" type="line">
+    <n-tabs v-model:value="tabValue" justify-content="start" type="line">
       <n-tab-pane name="list" tab="文章列表">
         <div v-for="(blog, index) in articleList" :key="blog.id">
           <n-card :title="blog.title" style="margin-bottom: 15px">
@@ -8,7 +8,7 @@
             <template #footer>
               <n-space align="center">
                 <div>发布时间：{{ fomatTime(blog.create_time) }}</div>
-                <n-button>修改</n-button>
+                <n-button @click="toUpdate(blog)">修改</n-button>
                 <n-button>删除</n-button>
               </n-space>
             </template>
@@ -35,7 +35,7 @@
               placeholder="请输入标题"
             />
           </n-form-item>
-          <n-form-item label="标题">
+          <n-form-item label="分类">
             <n-select
               v-model:value="addArticle.categoryId"
               :options="selectOptions"
@@ -50,7 +50,31 @@
           </n-form-item>
         </n-form>
       </n-tab-pane>
-      <n-tab-pane name="jay chou" tab="周杰伦"> 七里香 </n-tab-pane>
+      <n-tab-pane name="update" tab="修改文章">
+        <n-form>
+          <n-form-item label="标题">
+            <n-input
+              v-model:value="updateArticle.title"
+              placeholder="请输入标题"
+            />
+          </n-form-item>
+          <n-form-item label="分类">
+            <n-select
+              v-model:value="updateArticle.categoryId"
+              :options="selectOptions"
+              placeholder="选择分类"
+            />
+          </n-form-item>
+          <n-form-item label="内容">
+            <rich-text-editor
+              v-model="updateArticle.content"
+            ></rich-text-editor>
+          </n-form-item>
+          <n-form-item>
+            <n-button @click="update">提交</n-button>
+          </n-form-item>
+        </n-form>
+      </n-tab-pane>
     </n-tabs>
   </div>
 </template>
@@ -73,6 +97,8 @@ import {
   reqCategoryList,
   reqAddArticle,
   reqBlogList,
+  reqBlogDetail,
+  reqUpdateArticle
 } from "../../api/index.js";
 import { injectKeyMessage } from "../../context/context.js";
 const message = inject(injectKeyMessage);
@@ -113,7 +139,7 @@ const pageCount = computed(() => {
 const toPage = (page) => {
   pageInfo.page = page; // 用户视觉上修改选中页码为高亮
   articleListInit(); // 数据展示上获取当前页码的数据
-}
+};
 
 const articleListInit = async () => {
   let result = await reqBlogList(pageInfo);
@@ -140,6 +166,36 @@ const fomatTime = (timeStamp) => {
   let date = new Date(timeStamp);
   return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
 };
+
+// 修改文章相关的数据对象
+const updateArticle = reactive({
+  id: 0,
+  categoryId: null,
+  title: "",
+  content: "",
+});
+
+const tabValue = ref("list"); // n-tabs展示部分对应的标识变量
+const toUpdate = async (blog) => {
+  updateArticle.id = blog.id;
+  updateArticle.categoryId = blog.category_id;
+  updateArticle.title = blog.title;
+  let result = await reqBlogDetail(blog.id);
+  let completeContent = result.data.rows[0].content;
+  updateArticle.content = completeContent;
+  tabValue.value = "update";
+};
+
+const update = async () => {
+  let result = await reqUpdateArticle(updateArticle);
+  if(result.data.code === 200) {
+    articleListInit();
+    message.info("修改成功~");
+    tabValue.value = "list";
+  }else {
+    message.error(result.data.msg)
+  }
+}
 </script>
 
 <style scoped lang="scss">

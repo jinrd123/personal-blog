@@ -32,7 +32,17 @@ export const reqAddArticle = async (Article: { categoryId: number, title: string
     return result;
 }
 
-export const reqBlogList = async (queryParams: {page: number | undefined, pageSize: number | undefined, categoryId: number | undefined, keyword: string | undefined}) => {
+export const reqBlogList = async (queryParams: { page: number | undefined, pageSize: number | undefined, categoryId: number | undefined, keyword: string | undefined }) => {
     let result = requests({ url: "/blog/search", method: "get", params: queryParams });
+    return result;
+}
+
+export const reqBlogDetail = async (id: number) => {
+    let result = requests({ url: "/blog/detail", method: "get", params: { id } });
+    return result;
+}
+
+export const reqUpdateArticle = async (Article: {id: number, title: string, categoryId: number, content: string}) => {
+    let result = requests({url: "/blog/_token/update", method: "put", data: Article});
     return result;
 }
