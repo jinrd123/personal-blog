@@ -9,6 +9,7 @@ let routes = [
         ],
         redirect: "/dashboard/article"
     },
+    { path: "/homepage", component: () => import("../views/HomePage.vue") },
 ];
 
 const router = createRouter({
