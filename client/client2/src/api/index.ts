@@ -32,7 +32,7 @@ export const reqAddArticle = async (Article: { categoryId: number, title: string
     return result;
 }
 
-export const reqBlogList = async () => {
-    let result = requests({ url: "/blog/search", method: "get" });
+export const reqBlogList = async (queryParams: {page: number | undefined, pageSize: number | undefined, categoryId: number | undefined, keyword: string | undefined}) => {
+    let result = requests({ url: "/blog/search", method: "get", params: queryParams });
     return result;
 }

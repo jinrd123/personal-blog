@@ -14,6 +14,18 @@
             </template>
           </n-card>
         </div>
+        <n-space>
+          <span
+            v-for="(page, index) in pageCount"
+            :key="index"
+            @click="toPage(page)"
+            :style="[
+              'color:' + (page == pageInfo.page ? 'red' : ''),
+              'cursor:pointer',
+            ]"
+            >{{ page }}</span
+          >
+        </n-space>
       </n-tab-pane>
       <n-tab-pane name="add" tab="添加文章">
         <n-form>
@@ -44,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref, inject } from "vue";
+import { onMounted, reactive, ref, inject, computed } from "vue";
 import {
   NTabs,
   NTabPane,
@@ -86,9 +98,27 @@ const selectOptionInit = async () => {
   });
 };
 
+const pageInfo = reactive({
+  // 文章列表相关的参数
+  page: 1, // （分页）页码——>发请求使用
+  pageSize: 3, // （分页）单页的大小——>发请求使用
+  count: 0, // 数据库中文章总数——>后台返回数据
+});
+// pageCount计算出来分页器一共有多少页,遍历这个数字形成html中的分页器
+const pageCount = computed(() => {
+  return Math.ceil(parseInt(pageInfo.count) / parseInt(pageInfo.pageSize));
+});
+
+//点击分页器的转跳函数
+const toPage = (page) => {
+  pageInfo.page = page; // 用户视觉上修改选中页码为高亮
+  articleListInit(); // 数据展示上获取当前页码的数据
+}
+
 const articleListInit = async () => {
-  let result = await reqBlogList();
+  let result = await reqBlogList(pageInfo);
   articleList.value = result.data.data.rows;
+  pageInfo.count = result.data.data.count;
 };
 
 const add = async () => {
@@ -109,7 +139,7 @@ const add = async () => {
 const fomatTime = (timeStamp) => {
   let date = new Date(timeStamp);
   return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
-}
+};
 </script>
 
 <style scoped lang="scss">

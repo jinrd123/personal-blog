@@ -38,7 +38,6 @@ router.get("/search", async (req, res) => {
      * 
      */
     let { keyword, categoryId, page, pageSize } = req.query
-
     /*
         前端没传查询参数的情况下分配一个初始值
     */

@@ -388,3 +388,21 @@ const fomatTime = (timeStamp) => {
 }
 ~~~
 
+## 请求文章列表时添加分页相关参数
+
+首先修改`reqBlogList`，添加分页相关的参数。请求接口有四个query参数，有两个分页相关参数`page`与`pageSize`，还有两个参数：`categoryId`分类相关 && `keyword`关键字相关。
+
+在不同场景下我们只需要用到相关的参数即可，所以这里涉及一个ts传参如何让一个属性成为可选属性（一个属性可传可不传）的写法：
+
+在可选属性后加`?`
+
+~~~typescript
+interface Person {
+  uuid: string;
+  pet?: Animal;
+}
+~~~
+
+ `pet?: Animal;` 写法就是 `pet: Animal | undefined;` 的简写。
+
+后端的`/blog/search`接口，从`req`从获取`query`参数（`req.query`），如果我们前端使用`axios(配置对象)`的请求方式，并且不想在`url`中传递`query`参数（因为这里我们不能确定某些query参数是否存在），我们就要配置`params`属性为query参数对象，这样后端同样可以通过`req.query`来获取到query参数对象（其实就是前端axios请求的params配置项）
