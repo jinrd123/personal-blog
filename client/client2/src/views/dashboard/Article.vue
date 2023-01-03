@@ -7,7 +7,7 @@
             <div v-html="blog.content" class="content"></div>
             <template #footer>
               <n-space align="center">
-                <div>发布时间：{{ blog.create_time }}</div>
+                <div>发布时间：{{ fomatTime(blog.create_time) }}</div>
                 <n-button>修改</n-button>
                 <n-button>删除</n-button>
               </n-space>
@@ -105,6 +105,11 @@ const add = async () => {
     message.error(result.data.msg);
   }
 };
+
+const fomatTime = (timeStamp) => {
+  let date = new Date(timeStamp);
+  return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+}
 </script>
 
 <style scoped lang="scss">

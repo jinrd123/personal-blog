@@ -370,3 +370,21 @@ plus：<n-select>组件`v-model`绑定的数据初始值应为`null`才能正常
 获取服务器数据后遍历展示，但有一个问题就是遍历展示时文章内容经过富文本编辑器的处理已经成html格式的字符串了，所以这里没有直接使用`{{blog.content}}`插值语法，而是使用了`<div v-html="blog.content"></div>`代替，这样文章列表里展示的文章内容也是文章真实的样子了。
 
 ## 设置文章列表多行文本溢出样式
+
+## 文章创建时间格式化展示
+
+首先服务端返回的创建时间是一个时间戳，服务端通过`Date`对象的`getTime`方法所得（`new Date().getTime()`），然后我们客户端对其进行格式化：
+
+~~~js
+const fomatTime = (timeStamp) => {
+  /*
+  	借助Date对象的三个方法分别获取年、月、日
+  		1. date.getFullYear()
+  		2. date.getMonth()
+  		3. date.getDate()
+  */
+  let date = new Date(timeStamp);
+  return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+}
+~~~
+
