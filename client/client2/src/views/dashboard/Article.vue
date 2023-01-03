@@ -3,8 +3,8 @@
     <n-tabs default-value="list" justify-content="start" type="line">
       <n-tab-pane name="list" tab="文章列表">
         <div v-for="(blog, index) in articleList" :key="blog.id">
-          <n-card :title="blog.title" style="margin-bottom:15px">
-            <div v-html="blog.content"></div>
+          <n-card :title="blog.title" style="margin-bottom: 15px">
+            <div v-html="blog.content" class="content"></div>
             <template #footer>
               <n-space align="center">
                 <div>发布时间：{{ blog.create_time }}</div>
@@ -107,5 +107,12 @@ const add = async () => {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
 </style>

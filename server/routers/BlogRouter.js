@@ -69,7 +69,7 @@ router.get("/search", async (req, res) => {
     }
 
     //查分页数据
-    let searchSql = " SELECT `id`,`category_id`,`create_time`,`title`,substr(`content`,0,50) AS `content` FROM `blog` " + whereSqlStr + " ORDER BY `create_time` DESC LIMIT ?,? "
+    let searchSql = " SELECT `id`,`category_id`,`create_time`,`title`,substr(`content`,0,200) AS `content` FROM `blog` " + whereSqlStr + " ORDER BY `create_time` DESC LIMIT ?,? "
     let searchSqlParams = params.concat([(page - 1) * pageSize, pageSize])
 
     //查询数据总数
@@ -82,8 +82,6 @@ router.get("/search", async (req, res) => {
     //分页数据
     let searchResult = await db.async.all(searchSql, searchSqlParams)
     let countResult = await db.async.all(searchCountSql, searchCountParams)
-
-    console.log(searchSql, countResult)
 
     if (searchResult.err == null && countResult.err == null) {
         res.send({
