@@ -31,3 +31,8 @@ export const reqAddArticle = async (Article: { categoryId: number, title: string
     let result = requests({ url: "/blog/_token/add", data: Article, method: "post" });
     return result;
 }
+
+export const reqBlogList = async () => {
+    let result = requests({ url: "/blog/search", method: "get" });
+    return result;
+}

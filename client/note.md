@@ -364,3 +364,7 @@ editorConfig.MENU_CONF['insertImage'] = {
 ## 添加文章页面`select`组件获取服务器数据正常展示
 
 plus：<n-select>组件`v-model`绑定的数据初始值应为`null`才能正常显式`placeholder`设置的内容。
+
+## 增加文章列表部分
+
+获取服务器数据后遍历展示，但有一个问题就是遍历展示时文章内容经过富文本编辑器的处理已经成html格式的字符串了，所以这里没有直接使用`{{blog.content}}`插值语法，而是使用了`<div v-html="blog.content"></div>`代替，这样文章列表里展示的文章内容也是文章真实的样子了。

@@ -1,8 +1,21 @@
 <template>
   <div>
-    <n-tabs default-value="add" justify-content="start" type="line">
-      <n-tab-pane name="add" tab="Oasis"> Wonderwall </n-tab-pane>
-      <n-tab-pane name="the beatles" tab="添加文章">
+    <n-tabs default-value="list" justify-content="start" type="line">
+      <n-tab-pane name="list" tab="文章列表">
+        <div v-for="(blog, index) in articleList" :key="blog.id">
+          <n-card :title="blog.title" style="margin-bottom:15px">
+            <div v-html="blog.content"></div>
+            <template #footer>
+              <n-space align="center">
+                <div>发布时间：{{ blog.create_time }}</div>
+                <n-button>修改</n-button>
+                <n-button>删除</n-button>
+              </n-space>
+            </template>
+          </n-card>
+        </div>
+      </n-tab-pane>
+      <n-tab-pane name="add" tab="添加文章">
         <n-form>
           <n-form-item label="标题">
             <n-input
@@ -11,7 +24,11 @@
             />
           </n-form-item>
           <n-form-item label="标题">
-            <n-select v-model:value="addArticle.categoryId" :options="selectOptions" placeholder="选择分类"/>
+            <n-select
+              v-model:value="addArticle.categoryId"
+              :options="selectOptions"
+              placeholder="选择分类"
+            />
           </n-form-item>
           <n-form-item label="内容">
             <rich-text-editor v-model="addArticle.content"></rich-text-editor>
@@ -28,9 +45,23 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref, inject } from "vue";
-import { NTabs, NTabPane, NForm, NFormItem, NInput, NSelect, NButton } from "naive-ui";
+import {
+  NTabs,
+  NTabPane,
+  NForm,
+  NFormItem,
+  NInput,
+  NSelect,
+  NButton,
+  NCard,
+  NSpace,
+} from "naive-ui";
 import RichTextEditor from "../../components/RichTextEditor.vue";
-import { reqCategoryList, reqAddArticle } from "../../api/index.js";
+import {
+  reqCategoryList,
+  reqAddArticle,
+  reqBlogList,
+} from "../../api/index.js";
 import { injectKeyMessage } from "../../context/context.js";
 const message = inject(injectKeyMessage);
 const addArticle = reactive({
@@ -40,22 +71,29 @@ const addArticle = reactive({
 });
 
 let selectOptions = ref(null);
+let articleList = ref(null);
 onMounted(() => {
   selectOptionInit();
-})
+  articleListInit();
+});
 const selectOptionInit = async () => {
   let result = await reqCategoryList();
   selectOptions = result.data.rows.map((item) => {
     return {
       label: item.name,
-      value: item.id
-    }
-  })
-}
+      value: item.id,
+    };
+  });
+};
+
+const articleListInit = async () => {
+  let result = await reqBlogList();
+  articleList.value = result.data.data.rows;
+};
 
 const add = async () => {
   let result = await reqAddArticle(addArticle);
-  if(result.data.code === 200) {
+  if (result.data.code === 200) {
     message.info(result.data.msg);
     addArticle.categoryId = null;
     addArticle.title = "";
@@ -63,11 +101,10 @@ const add = async () => {
     /*
       此处应该转跳至文章列表页面（待开发）
     */
-  }else {
+  } else {
     message.error(result.data.msg);
   }
-}
-
+};
 </script>
 
 <style scoped>
