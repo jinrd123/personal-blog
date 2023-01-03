@@ -57,6 +57,12 @@ const add = async () => {
   let result = await reqAddArticle(addArticle);
   if(result.data.code === 200) {
     message.info(result.data.msg);
+    addArticle.categoryId = null;
+    addArticle.title = "";
+    addArticle.content = "";
+    /*
+      此处应该转跳至文章列表页面（待开发）
+    */
   }else {
     message.error(result.data.msg);
   }

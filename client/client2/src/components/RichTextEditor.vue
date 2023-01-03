@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import "@wangeditor/editor/dist/css/style.css";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
-import { inject } from "vue";
+import { inject, watch } from "vue";
 import {
   shallowRef,
   ref,
@@ -64,6 +64,10 @@ const props = defineProps({
   },
 });
 const valueHtml = ref(props.modelValue);
+// Article组件中修改传来的文章content时(也就是添加文章之后置空内容)，同步更新这里的valueHtml
+watch(() => props.modelValue, (newValue) => {
+  valueHtml.value = newValue;
+})
 // 组件销毁时，也及时销毁编辑器，重要！
 onBeforeUnmount(() => {
   const editor = editorRef.value;
