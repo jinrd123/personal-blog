@@ -27,6 +27,7 @@
             </template>
           </n-card>
         </div>
+        <n-pagination v-model:page="pageInfo.page" :page-count="pageCount" @update:page="toPage"/>
     <n-divider />
     <div class="footer">
         <div>
@@ -37,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { NPopselect, NDivider, NCard, NSpace } from "naive-ui";
+import { NPopselect, NDivider, NCard, NSpace, NPagination } from "naive-ui";
 import { ref, onMounted, watch, computed, reactive } from "vue";
 import { reqCategoryList, reqBlogList } from "../api/index";
 import { useRouter, useRoute } from "vue-router";
@@ -49,7 +50,7 @@ const categoryOptions = ref([]); // 存储n-popselect分类下拉列表的配置
 const selectedCategory = ref(0); // 记录当前选中的分类的id
 
 /*
-  从Article组件中搬来的：获取文章列表相关逻辑
+  从Article组件中搬来的：获取文章列表相关逻辑(下面相邻代码皆为与Article中的逻辑重复部分)
 */
 let articleList = ref(null);
 const pageInfo = reactive({
@@ -72,6 +73,10 @@ const fomatTime = (timeStamp) => {
   let date = new Date(timeStamp);
   return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
 };
+// 分页相关切换
+const toPage = () => {
+  articleListInit();
+}
 
 
 const categoryListInit = async () => {
@@ -102,6 +107,7 @@ const homePage = () => {
 const dashboard = () => {
     router.push("/login");
 }
+
 </script>
 
 <style scoped lang="scss">
