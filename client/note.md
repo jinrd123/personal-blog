@@ -553,3 +553,16 @@ plus：路由配置时当然也要配置好params参数：
 ~~~
 
 这样，就实现了HomePage页面点击文章之后在新的页面打开文章详情页面了
+
+# 补：首页实现文章分类切换
+
+说白了就是加上分类相关的参数重新发个请求的事情，但是发现在首页组件中，文章列表的请求参数`pageInfo`中并没有分类相关的参数，所以这里需要进行一个对象的属性添加：
+
+~~~js
+const searchByCatrgory = () => {
+  let searchParams = Object.assign(pageInfo, {categoryId: selectedCategory.value});
+  articleListInit();
+}
+~~~
+
+这里我没有直接`.`添加属性，而是使用了`Object.assign`进行对象合并，这样就不用修改`articleListInit();`的逻辑直接用就行了。

@@ -7,6 +7,7 @@
           v-model:value="selectedCategory"
           :options="categoryOptions"
           trigger="click"
+          @update:value="searchByCatrgory"
         >
           <div>
             分类<span>{{ categoryName }}</span>
@@ -139,6 +140,12 @@ const toDetail = (blog) => {
   //   id: blog.id,
   // }});
   window.open(`/detail/${blog.id}`);
+}
+
+// 切换文章分类的回调
+const searchByCatrgory = () => {
+  let searchParams = Object.assign(pageInfo, {categoryId: selectedCategory.value});
+  articleListInit();
 }
 </script>
 
