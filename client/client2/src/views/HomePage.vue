@@ -17,6 +17,12 @@
       
     </div>
     <n-divider />
+
+    <n-space class="search">
+      <n-input v-model:value="pageInfo.keyword" :style="{width: '500px'}" placeholder="请输入关键字"/>
+      <n-button type="primary" ghost @click="search">搜索</n-button>
+    </n-space>
+
     <div v-for="(blog, index) in articleList" :key="blog.id">
           <n-card :title="blog.title" style="margin-bottom: 15px">
             <div v-html="blog.content" class="content"></div>
@@ -38,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { NPopselect, NDivider, NCard, NSpace, NPagination } from "naive-ui";
+import { NPopselect, NDivider, NCard, NSpace, NPagination, NButton, NInput } from "naive-ui";
 import { ref, onMounted, watch, computed, reactive } from "vue";
 import { reqCategoryList, reqBlogList } from "../api/index";
 import { useRouter, useRoute } from "vue-router";
@@ -108,6 +114,12 @@ const dashboard = () => {
     router.push("/login");
 }
 
+// 搜索相关的回调
+const search = async () => {
+  let result = await reqBlogList(pageInfo);
+  articleList.value = result.data.data.rows;
+  pageInfo.count = result.data.data.count;
+} 
 </script>
 
 <style scoped lang="scss">
@@ -135,5 +147,8 @@ const dashboard = () => {
   text-align: center;
   color: #64676a;
   line-height: 25px;
+}
+.search.n-space {
+  margin-bottom: 10px;
 }
 </style>
