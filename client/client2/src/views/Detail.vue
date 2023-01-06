@@ -4,7 +4,6 @@
     <div>
       <div v-html="blog.content"></div>
     </div>
-    <n-button>返回</n-button>
   </div>
 </template>
 
@@ -12,7 +11,7 @@
 import { onMounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { reqBlogDetail } from "../api/index.js";
-import { NH1, NButton } from "naive-ui";
+import { NH1 } from "naive-ui";
 const router = useRouter();
 const route = useRoute();
 const blog = ref({});
@@ -20,8 +19,7 @@ onMounted(() => {
   loadBlog();
 });
 const loadBlog = async () => {
-  let result = await reqBlogDetail(route.query.id);
-  console.log(result);
+  let result = await reqBlogDetail(route.params.id);
   blog.value = result.data.rows[0];
 };
 </script>
@@ -34,9 +32,9 @@ const loadBlog = async () => {
   width: 1200px;
   margin: 0 auto;
   p {
-    >img {
-        max-height: 400px;
-        max-width: 100%;
+    > img {
+      max-height: 400px;
+      max-width: 100%;
     }
   }
 }

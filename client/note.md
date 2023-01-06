@@ -516,3 +516,40 @@ p:has(>img) {
 但是由于兼容性差的问题，这个方案只能放弃。
 
 确实暂时没办法实现这个效果了，只能让文本与图片都左对齐了。
+
+# 从文章列表打开文章详情页
+
+我希望新打开一个页面来呈现文章详情页：
+
+核心思路就是使用`window.open(url)`，新打开的页面的地址就是：项目运行地址（比如`localhost:8080/`）加上`url`。
+
+所以我在`HomePage.vue`中点击文章想转跳到`/detail`路由的话：
+
+~~~js
+window.open(`/detail/${blog.id}`);
+~~~
+
+但是这里vueRouter必须不能用hash模式（路径带`#`的那种），所以这里我把路由改成了history模式：
+
+~~~js
+const router = createRouter({
+    history: createWebHistory(),
+    routes,
+})
+~~~
+
+这里需要传递`blog.id`给detail组件，从上面的window.open()的参数url也能看出来，我们这里使用的是路由转跳的`params`参数
+
+detail页面请求文章详情通过路由的params属性获取路由参数：
+
+~~~js
+let result = await reqBlogDetail(route.params.id);
+~~~
+
+plus：路由配置时当然也要配置好params参数：
+
+~~~js
+{ path: "/detail/:id", component: () => import("../views/Detail.vue") },
+~~~
+
+这样，就实现了HomePage页面点击文章之后在新的页面打开文章详情页面了

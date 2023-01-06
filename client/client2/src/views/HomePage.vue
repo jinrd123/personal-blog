@@ -135,10 +135,10 @@ const search = async () => {
 
 // 转跳至文章详情页
 const toDetail = (blog) => {
-  router.push({path: "/detail", query: {
-    id: blog.id,
-  }});
-  // window.open(`/detail/id=${blog.id}`);
+  // router.push({path: "/detail", query: {
+  //   id: blog.id,
+  // }});
+  window.open(`/detail/${blog.id}`);
 }
 </script>
 
