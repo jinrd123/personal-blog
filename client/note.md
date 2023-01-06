@@ -465,3 +465,54 @@ const update = async () => {
 ## 中间文章列表的展示
 
 完全就是从`Article`组件中拿来的模板与逻辑，所以这里留个坑，可以封装成一个文章列表组件
+
+# 文章详情页面开发
+
+这里遇见一个棘手的问题：
+
+对于富文本编辑器给出的html模板字符串，我们使用<div v-html="xxx">呈现之后，发现富文本编辑器给出的html结构是：对于文本和图片，都直接外面包一个<p>
+
+这里我想通过css控制图片大小适当（比如定宽）以及位置居中：
+
+* 关于如何选中<img>标签
+
+因为<style>标签的`scoped`属性，导致我直接写选择器`p img`去选选不到，因为富文本编辑器生成的标签是没有`scoped`生成的字符串的（而我们写在<style scoped>里面的选择器实际上都加上了那个字符串）。
+
+---
+
+scoped实现（vue官方文档）：
+
+[单文件组件](https://v2.cn.vuejs.org/v2/guide/single-file-components.html)让你可以在同一个文件里完全控制 CSS，将其作为组件代码的一部分。
+
+```css
+<style scoped>
+  @media (min-width: 250px) {
+    .list-container:hover {
+      background: orange;
+    }
+  }
+</style>
+```
+
+这个可选 `scoped` attribute 会自动添加一个唯一的 attribute (比如 `data-v-21e5b78`) 为组件内 CSS 指定作用域，编译的时候 `.list-container:hover` 会被编译成类似 `.list-container[data-v-21e5b78]:hover`。
+
+---
+
+所以这里暂时的解决方案就是删除`scoped`属性，然后就能正常选中img标签了，但是给<p>设置了`display:flex; && justify-content:center`之后会导致<p>里面的文本也直接水平居中了...
+
+* 如何只让<p>里的<img>水平居中，而不影响文本左对齐
+
+`:has()`：伪类选择器：`()`里的内容匹配子类或者兄弟，然后选中使用`:has`的标签（[(40条消息) CSS子元素选择父元素_风轻云淡180518的博客-CSDN博客_css根据子元素选择父元素](https://blog.csdn.net/qq_20343517/article/details/82990211)），也就是说理论上讲我们：
+
+~~~css
+p:has(>img) {
+    display:flex;
+    justify-content:center;
+}
+~~~
+
+就可以只让亲儿子是img的p设置flex布局。
+
+但是由于兼容性差的问题，这个方案只能放弃。
+
+确实暂时没办法实现这个效果了，只能让文本与图片都左对齐了。
