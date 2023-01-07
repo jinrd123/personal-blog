@@ -106,6 +106,11 @@ const categoryListInit = async () => {
       value: item.id,
     };
   });
+  // 添加初始状态的默认”全部“分类
+  categoryOptions.value.push({
+    label: "全部",
+    value: 0,
+  })
 };
 
 const categoryName = computed(() => {
