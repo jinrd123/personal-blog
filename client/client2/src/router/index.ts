@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 let routes = [
-    { path: "/", component: () => import("../views/Test.vue") },
+    { path: "/", redirect: "/homepage" },
     { path: "/login", component: () => import("../views/Login.vue") },
     {
         path: "/dashboard", component: () => import("../views/dashboard/Dashboard.vue"), children: [

@@ -14,8 +14,13 @@
         </n-form-item>
       </n-form>
       <template #footer>
-        <n-checkbox v-model:checked="admin.remember" label="记住我" />
-        <n-button @click="login">登录</n-button>
+        <div class="click-button">
+          <n-checkbox v-model:checked="admin.remember" label="记住我" />
+          <span class="login-and-return">
+            <n-button @click="login">登录</n-button>
+            <n-button @click="backToBlog">返回博客</n-button>
+          </span>
+        </div>
       </template>
     </n-card>
   </div>
@@ -26,11 +31,11 @@ import { NCard, NForm, NFormItem, NInput, NCheckbox, NButton } from "naive-ui";
 import { reactive, inject, onMounted } from "vue";
 import { AdminStore } from "../stores/AdminStore";
 import { reqLogin } from "../api";
-import { injectKeyMessage } from '../context/context';
+import { injectKeyMessage } from "../context/context";
 
 import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
-const route = useRoute()
+const route = useRoute();
 
 const adminStore = AdminStore();
 const message = inject(injectKeyMessage);
@@ -53,31 +58,43 @@ const admin = reactive({
 });
 
 const login = async () => {
-    let result = await reqLogin(admin);
-    if(result.data.code === 200) {
-        adminStore.token = result.data.data.token;
-        adminStore.account = result.data.data.account;
-        adminStore.token = result.data.data.token;
-        message.info("登录成功");
+  let result = await reqLogin(admin);
+  if (result.data.code === 200) {
+    adminStore.token = result.data.data.token;
+    adminStore.account = result.data.data.account;
+    adminStore.token = result.data.data.token;
+    message.info("登录成功");
 
-        if(admin.remember) {
-          localStorage.setItem("account", admin.account);
-          localStorage.setItem("password", admin.password);
-          localStorage.setItem("remember", admin.remember? "1":"0");
-        }
-
-        router.push("/dashboard");
-    } else {
-        message.error("登录失败");
+    if (admin.remember) {
+      localStorage.setItem("account", admin.account);
+      localStorage.setItem("password", admin.password);
+      localStorage.setItem("remember", admin.remember ? "1" : "0");
     }
-}
 
+    router.push("/dashboard");
+  } else {
+    message.error("登录失败");
+  }
+};
+
+const backToBlog = () => {
+  router.push("/homepage");
+};
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .login-panel {
   width: 500px;
   margin: 0 auto;
   margin-top: 130px;
+}
+.click-button {
+  display: flex;
+  justify-content: space-between;
+  .login-and-return {
+    min-width: 150px;
+    display: flex;
+    justify-content: space-between;
+  }
 }
 </style>
