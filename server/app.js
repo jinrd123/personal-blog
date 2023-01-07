@@ -3,7 +3,7 @@ const multer = require("multer");
 const path = require("path");
 const { db } = require("./db/DbUtils");
 const app = express();
-const port = 8080;
+const port = 80;
 
 /*
     配置跨域
