@@ -3,7 +3,7 @@ import { AdminStore } from "../stores/AdminStore.js";
 const adminStore = AdminStore();
 
 const requests = axios.create({
-    baseURL:"http://localhost:8080",
+    baseURL:"http://101.200.213.76:80",
 });
 
 requests.interceptors.request.use((config) => {
