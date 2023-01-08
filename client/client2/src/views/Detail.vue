@@ -4,6 +4,9 @@
     <div>
       <div v-html="blog.content"></div>
     </div>
+    <div class="detail-footer">
+      <n-button @click="back">返回首页</n-button>
+    </div>
   </div>
 </template>
 
@@ -11,7 +14,7 @@
 import { onMounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { reqBlogDetail } from "../api/index.js";
-import { NH1 } from "naive-ui";
+import { NH1, NButton } from "naive-ui";
 const router = useRouter();
 const route = useRoute();
 const blog = ref({});
@@ -19,9 +22,12 @@ onMounted(() => {
   loadBlog();
 });
 const loadBlog = async () => {
-  let result = await reqBlogDetail(route.params.id);
+  let result = await reqBlogDetail(route.query.id);
   blog.value = result.data.rows[0];
 };
+const back = () => {
+  router.go(-1);
+}
 </script>
 
 <style lang="scss">
@@ -37,5 +43,9 @@ const loadBlog = async () => {
       max-width: 100%;
     }
   }
+}
+.detail-footer {
+  display: flex;
+  justify-content: flex-end;
 }
 </style>
