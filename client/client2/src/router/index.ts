@@ -10,7 +10,7 @@ let routes = [
         redirect: "/dashboard/article"
     },
     { path: "/homepage", component: () => import("../views/HomePage.vue") },
-    { path: "/detail/:id", component: () => import("../views/Detail.vue") },
+    { path: "/detail", component: () => import("../views/Detail.vue") },
 ];
 
 const router = createRouter({
