@@ -5,6 +5,19 @@ const { db } = require("./db/DbUtils");
 const app = express();
 const port = 81;
 
+// 解决前端history路由导致的页面刷新404问题
+// const history = require('connect-history-api-fallback');
+// app.use(history({
+//     rewrites: [
+//         {
+//             from: /^.*$/,
+//             to: function (context) {
+//                 return context.parsedUrl.path
+//             }
+//         }
+//     ]
+// }))
+
 /*
     配置跨域
 */
@@ -35,21 +48,21 @@ app.use(express.static(path.join(__dirname, "public")));
 */
 const ADMIN_TOKEN_PATH = "/_token";
 app.all("*", async (req, res, next) => {
-    if(req.path.indexOf(ADMIN_TOKEN_PATH) > -1) { // 对于有权限要求的接口
+    if (req.path.indexOf(ADMIN_TOKEN_PATH) > -1) { // 对于有权限要求的接口
         let { token } = req.headers; // 请求头中拿到token字段
-        
+
         let admin_token_sql = "SELECT * FROM `admin` WHERE `token` = ?";
         let adminResult = await db.async.all(admin_token_sql, [token]);
-        if(adminResult.err !== null || adminResult.rows.length === 0) {
+        if (adminResult.err !== null || adminResult.rows.length === 0) {
             res.send({
                 code: 403,
                 msg: "请先登录"
             })
             return;
-        }else {
+        } else {
             next();
         }
-    }else {
+    } else {
         next();
     }
 })
